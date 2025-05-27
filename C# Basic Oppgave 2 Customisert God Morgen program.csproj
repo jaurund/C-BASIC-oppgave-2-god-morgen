@@ -8,4 +8,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NTextCat" Version="0.3.65" />
+  </ItemGroup>
+
 </Project>

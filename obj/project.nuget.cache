@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "vGuUblmh+/A=",
+  "dgSpecHash": "S5bp5J0mxQ8=",
   "success": true,
   "projectFilePath": "C:\\Users\\jvsan\\OneDrive\\Dokumenter\\Alt viktig\\Kodehode\\Oppgaver\\C# Basic Oppgave 2 Customisert God Morgen program\\C# Basic Oppgave 2 Customisert God Morgen program.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\jvsan\\.nuget\\packages\\ntextcat\\0.3.65\\ntextcat.0.3.65.nupkg.sha512"
+  ],
   "logs": []
 }

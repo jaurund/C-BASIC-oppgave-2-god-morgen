@@ -27,19 +27,29 @@ class Program
 
             Console.WriteLine($"Weather in {city}: {weatherMain}, Temperature: {temp}°C");
 
-            // Greetings based on current weather
-            if (temp < 0)
+            // Categorize temperature
+            string tempMessage = temp switch
             {
-                Console.WriteLine("Stay warm!");
-            }
-            else if (temp < 20)
+                <= 0 => "It's freezing today, so wear several warm layers.",
+                <= 10 => "It's quite cold today. A proper jacket is a must.",
+                <= 20 => "The temperature is mild, maybe bring a light jacket.",
+                <= 30 => "It's a warm day, so light clothes should do.",
+                _ => "It's very hot today — stay in the shade and hydrate!"
+            };
+
+            // Create message based on weather
+            string weatherMessage = weatherMain switch
             {
-                Console.WriteLine("Have a nice day!");
-            }
-            else
-            {
-                Console.WriteLine("It's a hot day, stay hydrated!");
-            }
+                "Rain" => "Also, bring waterproofs — it's rainy.",
+                "Clear" => "The skies are clear, so enjoy the sun!",
+                "Snow" => "Snow is expected, so be cautious when walking.",
+                "Clouds" => "It's cloudy, but dry for now.",
+                "Drizzle" => "A light drizzle is in the air, maybe bring an umbrella.",
+                _ => "Check outside for more detailed weather conditions."
+            };
+
+            Console.WriteLine($"{tempMessage} {weatherMessage}");
+
         }
         catch (Exception ex)
         {
