@@ -1,0 +1,14 @@
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.AssemblyInfoInputs.cache
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.AssemblyInfo.cs
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.csproj.CoreCompileInputs.cache
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\bin\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.exe
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\bin\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.deps.json
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\bin\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.runtimeconfig.json
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\bin\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.dll
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\bin\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.pdb
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.dll
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\refint\C# Basic Oppgave 2 Customisert God Morgen program.dll
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.pdb
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\C# Basic Oppgave 2 Customisert God Morgen program.genruntimeconfig.cache
+C:\Users\jvsan\OneDrive\Dokumenter\Alt viktig\Kodehode\Oppgaver\C# Basic Oppgave 2 Customisert God Morgen program\obj\Debug\net9.0\ref\C# Basic Oppgave 2 Customisert God Morgen program.dll

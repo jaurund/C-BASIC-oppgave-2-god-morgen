@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "C# Basic Oppgave 2 Customisert God Morgen program/1.0.0": {
+        "runtime": {
+          "C# Basic Oppgave 2 Customisert God Morgen program.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "C# Basic Oppgave 2 Customisert God Morgen program/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
