@@ -30,7 +30,7 @@ class Program
             // Categorize temperature
             string tempMessage = temp switch
             {
-                <= 0 => "It's freezing today, so wear several warm layers.",
+                <= 0 => "It's freezing today, be careful when driving and wear warm clothes.",
                 <= 10 => "It's quite cold today. A proper jacket is a must.",
                 <= 20 => "The temperature is mild, maybe bring a light jacket.",
                 <= 30 => "It's a warm day, so light clothes should do.",
