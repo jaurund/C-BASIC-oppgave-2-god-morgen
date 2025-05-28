@@ -2,5 +2,7 @@
 Using System
 Using System.Globalization
 
-console.read ("Good morning!")
+Console.ReadLine ("Good morning!");
+Console.WriteLine($"Good morning! The weather in {city}: {weatherMain}, Temperature: {temp}°C");
+Console.Write($"{tempMessage}{weatherMessage}")
 ```

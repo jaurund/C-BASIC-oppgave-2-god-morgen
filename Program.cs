@@ -8,7 +8,14 @@ class Program
 {
     static async Task Main()
     {
-        string apiKey = "a405afdc1cd34e0aaa160424e6f97561"; //Key from OpenWeatherMap
+        Console.WriteLine("Good morning!");
+        string userInput = Console.ReadLine();
+
+        string languageCode = GreetingHandler.GetGreetingLanguage(userInput);
+        string greetingResponse = GreetingHandler.RespondToGreeting(languageCode);
+        Console.WriteLine(greetingResponse);
+
+        string apiKey = "a405afdc1cd34e0aaa160424e6f97561"; //API key from OpenWeatherMap
         string city = "Bergen";
         string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
@@ -25,7 +32,7 @@ class Program
             string weatherMain = root.GetProperty("weather")[0].GetProperty("main").GetString();
             double temp = root.GetProperty("main").GetProperty("temp").GetDouble();
 
-            Console.WriteLine($"Weather in {city}: {weatherMain}, Temperature: {temp}°C");
+            Console.WriteLine($"The weather in {city}: {weatherMain}, Temperature: {temp}°C");
 
             // Categorize temperature
             string tempMessage = temp switch
