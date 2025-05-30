@@ -11,8 +11,7 @@ class Program
         Console.WriteLine("Good morning, user!");
         string userInput = Console.ReadLine();
 
-        string languageCode = GreetingHandler.GetGreetingLanguage(userInput);
-        string greetingResponse = GreetingHandler.RespondToGreeting(languageCode);
+        string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
         Console.WriteLine(greetingResponse);
 
         string apiKey = "a405afdc1cd34e0aaa160424e6f97561"; //API key from OpenWeatherMap
