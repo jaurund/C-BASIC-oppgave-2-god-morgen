@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Fastenshtein;
 using DeepL;
+using Fastenshtein;
 
 public static class GreetingHandler
 {
@@ -14,30 +14,44 @@ public static class GreetingHandler
     {
         string cleanedInput = Regex.Replace(userInput.ToLowerInvariant(), @"[^\w\s]", "").Trim();
 
-        var translator = new DeepL();
-        var detectedLanguages = await translator.DetectAsync(cleanedInput);
-        string detectedLang = detectedLanguages?[0].Language ?? "en";
+        string detectedLang = DetectLangSimple(cleanedInput);
 
         var distance = new Levenshtein(cleanedInput);
         int score = distance.DistanceFrom("good morning");
+
         if (score < 3)
         {
             return await TranslateResponseAsync("Good morning to you too!", detectedLang);
         }
+
         return await TranslateResponseAsync(
             "Sorry, I didn't understand that greeting, but let’s continue...",
             detectedLang
         );
     }
 
+    private static string DetectLangSimple(string text)
+    {
+        // Simple keyword-based guessing (can improve later)
+        if (text.Contains("bonjour"))
+            return "FR";
+        if (text.Contains("guten"))
+            return "DE";
+        if (text.Contains("buenos"))
+            return "ES";
+        if (text.Contains("god"))
+            return "NB"; // Norwegian Bokmål
+        return "EN";
+    }
+
     private static async Task<string> TranslateResponseAsync(string englishText, string targetLang)
     {
-        var translator = new DeepL();
-        string translated = await translator.TranslateAsync(englishText, "en", targetLang);
-        return translated;
+        if (targetLang.ToUpper() == "EN")
+            return englishText;
+        var result = await translator.TranslateTextAsync(englishText, "EN", targetLang);
+        return result.Text;
     }
 }
-
 
 public class Greeting
 {

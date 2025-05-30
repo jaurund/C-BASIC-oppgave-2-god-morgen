@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("C# Basic Oppgave 2 Customisert God Morgen program")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b395d537357f3ddb53d3b9c13f3ae425545415e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b59213e9af3a0f5499645c87f1335bf34aee9e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("C# Basic Oppgave 2 Customisert God Morgen program")]
 [assembly: System.Reflection.AssemblyTitleAttribute("C# Basic Oppgave 2 Customisert God Morgen program")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
