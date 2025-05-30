@@ -44,6 +44,18 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "DetectLanguage": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Fastenshtein": {
+              "target": "Package",
+              "version": "[1.0.10, )"
+            },
+            "LibreTranslate.Net": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "NTextCat": {
               "target": "Package",
               "version": "[0.3.65, )"

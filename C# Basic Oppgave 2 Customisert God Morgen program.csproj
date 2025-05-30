@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DetectLanguage" Version="1.0.0" />
+    <PackageReference Include="Fastenshtein" Version="1.0.10" />
+    <PackageReference Include="LibreTranslate.Net" Version="1.0.1" />
     <PackageReference Include="NTextCat" Version="0.3.65" />
   </ItemGroup>
 

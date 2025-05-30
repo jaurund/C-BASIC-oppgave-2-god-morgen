@@ -8,7 +8,7 @@ class Program
 {
     static async Task Main()
     {
-        Console.WriteLine("Good morning!");
+        Console.WriteLine("Good morning, user!");
         string userInput = Console.ReadLine();
 
         string languageCode = GreetingHandler.GetGreetingLanguage(userInput);
