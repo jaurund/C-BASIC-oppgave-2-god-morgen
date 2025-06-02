@@ -8,13 +8,14 @@ class Program
 {
     static async Task Main()
     {
+        string key = File.ReadAllText("key.txt");
         Console.WriteLine("Good morning, user!");
         string userInput = Console.ReadLine();
 
         string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
         Console.WriteLine(greetingResponse);
 
-        string apiKey = "a405afdc1cd34e0aaa160424e6f97561"; //API key from OpenWeatherMap
+        string apiKey = key; //API key from OpenWeatherMap
         string city = "Bergen";
         string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
