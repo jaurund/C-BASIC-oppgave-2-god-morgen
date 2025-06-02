@@ -20,7 +20,7 @@ public static class GreetingHandler
     {
         return detectedLang.ToUpper() switch
         {
-            "EN" => "EN-GB", // Map generic English to British English
+            "EN" => "EN-US", // Map generic English to British English
             "EN-US" => "EN-US",
             "EN-GB" => "EN-GB",
             "DE" => "DE",
@@ -31,6 +31,11 @@ public static class GreetingHandler
             "PL" => "PL",
             "PT" => "PT-PT", // Map Portuguese to European Portuguese
             "RU" => "RU",
+            "DA" => "DA",
+            "SV" => "SV",
+            "FI" => "FI",
+            "NB" => "NB", // Norwegian Bokmål
+            "NN" => "NN", // Norwegian Nynorsk
             // Add more mappings for other languages as needed
             _ => "EN-GB" // Fallback to English if language is unsupported as target
         };
@@ -47,8 +52,11 @@ public static class GreetingHandler
 
         try
         {
-            // Translate the English text to the target language
-            var result = await translator.TranslateTextAsync(englishText, "EN-GB", mappedTargetLang);
+            // Debug: Log the source and target languages
+            Console.WriteLine($"Translating '{englishText}' to target language: {mappedTargetLang} with source language: auto-detect");
+
+            // Use null for source language to auto-detect (since input is English)
+            var result = await translator.TranslateTextAsync(englishText, null, mappedTargetLang);
             return result.Text;
         }
         catch (DeepLException ex)
