@@ -8,11 +8,18 @@ class Program
 {
     static async Task Main()
     {
-        string key = File.ReadAllText("key.txt");
+        string key = File.ReadAllText("key.txt")!;
         Console.WriteLine("Good morning, user!");
         string userInput = Console.ReadLine();
 
         string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
+        {
+            if (userInput is null)
+            {
+                Console.WriteLine("No input detected.");
+                return;
+            }
+        }
         Console.WriteLine(greetingResponse);
 
         string apiKey = key; //API key from OpenWeatherMap
@@ -29,7 +36,7 @@ class Program
             using JsonDocument doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
 
-            string weatherMain = root.GetProperty("weather")[0].GetProperty("main").GetString();
+            string? weatherMain = root.GetProperty("weather")[0].GetProperty("main").GetString();
             double temp = root.GetProperty("main").GetProperty("temp").GetDouble();
 
             Console.WriteLine($"The weather in {city}: {weatherMain}, Temperature: {temp}°C");

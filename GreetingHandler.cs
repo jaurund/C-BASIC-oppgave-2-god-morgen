@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DeepL;
@@ -7,19 +6,78 @@ using Fastenshtein;
 
 public static class GreetingHandler
 {
-    private static readonly string apiKey = "4a3aafff-6114-4528-92bc-a5b25a357357:fx";
-    private static readonly Translator translator = new Translator(apiKey);
+    private static readonly Translator translator;
 
+    // Static constructor to initialize translator with key from file
+    static GreetingHandler()
+    {
+        string apiKey = File.ReadAllText("key2deepL.txt")!.Trim();
+        translator = new Translator(apiKey);
+    }
+
+    // Map detected source language to valid DeepL target language
+    private static string MapToTargetLanguage(string detectedLang)
+    {
+        return detectedLang.ToUpper() switch
+        {
+            "EN" => "EN-GB", // Map generic English to British English
+            "EN-US" => "EN-US",
+            "EN-GB" => "EN-GB",
+            "DE" => "DE",
+            "FR" => "FR",
+            "ES" => "ES",
+            "IT" => "IT",
+            "NL" => "NL",
+            "PL" => "PL",
+            "PT" => "PT-PT", // Map Portuguese to European Portuguese
+            "RU" => "RU",
+            // Add more mappings for other languages as needed
+            _ => "EN-GB" // Fallback to English if language is unsupported as target
+        };
+    }
+
+    private static async Task<string> TranslateResponseAsync(string englishText, string targetLang)
+    {
+        if (detectedLang.StartsWith("EN", StringComparison.OrdinalIgnoreCase))
+            return englishText;
+
+        string targetLang = MapToTargetLanguage(detectedLang);
+
+        try
+        {
+            // Translate the English text to the target language
+            var result = await translator.TranslateTextAsync(englishText, "EN-GB", targetLang);
+            return result.Text;
+        }
+        catch (DeepLException ex)
+        {
+            Console.WriteLine($"Translation error: {ex.Message}");
+            return englishText; // Fallback to original text on error
+        }
+    }
     public static async Task<string> HandleGreetingAsync(string userInput)
     {
         string cleanedInput = Regex.Replace(userInput.ToLowerInvariant(), @"[^\w\s]", "").Trim();
 
-        string detectedLang = DetectLangSimple(cleanedInput);
+        // 1. Detect language of the user input, no translation yet
+        var detection = await translator.TranslateTextAsync(userInput, null, "EN-GB");
 
+        //debug
+        Console.WriteLine($"Detected language: {detectedLang}");
+
+
+        string detectedLang = detection.DetectedSourceLanguageCode.ToUpper();
+
+        // 2. Translate default English greeting to the detected language for Levenshtein referencing
+        var translatedGreeting = await translator.TranslateTextAsync("Good morning!", "EN-GB", detectedLang);
+        string localizedGreeting = Regex.Replace(translatedGreeting.Text.ToLowerInvariant(), @"[^\w\s]", "").Trim();
+
+        // 3. Compare cleaned user input with localized greeting using Levenshtein distance
         var distance = new Levenshtein(cleanedInput);
-        int score = distance.DistanceFrom("good morning");
+        int score = distance.DistanceFrom(localizedGreeting);
 
-        if (score < 3)
+        // 4. if close enough, accept greeting, if not, return default response and proceed
+        if (score < 5) // Arbitrary threshold for "closeness"
         {
             return await TranslateResponseAsync("Good morning to you too!", detectedLang);
         }
@@ -28,39 +86,5 @@ public static class GreetingHandler
             "Sorry, I didn't understand that greeting, but let’s continue...",
             detectedLang
         );
-    }
-
-    private static string DetectLangSimple(string text)
-    {
-        // Simple keyword-based guessing (can improve later)
-        if (text.Contains("bonjour"))
-            return "FR";
-        if (text.Contains("guten"))
-            return "DE";
-        if (text.Contains("buenos"))
-            return "ES";
-        if (text.Contains("god"))
-            return "NB"; // Norwegian Bokmål
-        return "EN";
-    }
-
-    private static async Task<string> TranslateResponseAsync(string englishText, string targetLang)
-    {
-        if (targetLang.ToUpper() == "EN")
-            return englishText;
-        var result = await translator.TranslateTextAsync(englishText, "EN", targetLang);
-        return result.Text;
-    }
-}
-
-public class Greeting
-{
-    public string LanguageCode { get; set; }
-    public string Response { get; set; }
-
-    public Greeting(string languageCode, string response)
-    {
-        LanguageCode = languageCode;
-        Response = response;
     }
 }
