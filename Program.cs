@@ -3,14 +3,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-
 class Program
 {
     static async Task Main()
     {
         string key = File.ReadAllText("key.txt")!;
         Console.WriteLine("Good morning, user!");
-        string userInput = Console.ReadLine();
+        string userInput = Console.ReadLine()!;
 
         string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
         {

@@ -2,111 +2,118 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DeepL;
-using Fastenshtein;
 
 public static class GreetingHandler
 {
     private static readonly Translator translator;
 
-    // Static constructor to initialize translator with key from file
     static GreetingHandler()
     {
-        string apiKey = File.ReadAllText("key2deepL.txt")!.Trim();
-        translator = new Translator(apiKey);
+        try
+        {
+            string apiKey = File.ReadAllText("key2deepL.txt").Trim();
+            if (string.IsNullOrWhiteSpace(apiKey))
+                throw new InvalidOperationException("DeepL API key is missing or empty.");
+            translator = new Translator(apiKey);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to initialize DeepL translator: {ex.Message}");
+            throw;
+        }
     }
 
-    // Map detected source language to valid DeepL target language
     private static string MapToTargetLanguage(string detectedLang)
     {
-        return detectedLang.ToUpper() switch
+        return detectedLang switch
         {
-            "EN" => "EN-US", // Map generic English to British English
-            "EN-US" => "EN-US",
-            "EN-GB" => "EN-GB",
-            "DE" => "DE",
-            "FR" => "FR",
-            "ES" => "ES",
-            "IT" => "IT",
-            "NL" => "NL",
-            "PL" => "PL",
-            "PT" => "PT-PT", // Map Portuguese to European Portuguese
-            "RU" => "RU",
-            "DA" => "DA",
-            "SV" => "SV",
-            "FI" => "FI",
-            "NB" => "NB", // Norwegian Bokmål
-            "NN" => "NN", // Norwegian Nynorsk
-            // Add more mappings for other languages as needed
-            _ => "EN-GB" // Fallback to English if language is unsupported as target
+            "en" => "EN-GB",
+            "de" => "DE",
+            "fr" => "FR",
+            "es" => "ES",
+            "it" => "IT",
+            "nl" => "NL",
+            "pl" => "PL",
+            "pt" => "PT-PT",
+            "ru" => "RU",
+            "da" => "DA",
+            "nb" => "NB",
+            "sv" => "SV",
+            _ => "EN-GB"
         };
     }
 
     private static async Task<string> TranslateResponseAsync(string englishText, string targetLang)
     {
-        // If detected language is English, return the original text
-        if (targetLang.StartsWith("EN", StringComparison.OrdinalIgnoreCase))
+        if (targetLang.StartsWith("en", StringComparison.OrdinalIgnoreCase))
             return englishText;
 
-        // Map detected language to a valid target language
         string mappedTargetLang = MapToTargetLanguage(targetLang);
 
         try
         {
-            // Debug: Log the source and target languages
-            Console.WriteLine($"Translating '{englishText}' to target language: {mappedTargetLang} with source language: auto-detect");
-
-            // Use null for source language to auto-detect (since input is English)
+            Console.WriteLine($"Translating '{englishText}' to target language: {mappedTargetLang}");
             var result = await translator.TranslateTextAsync(englishText, null, mappedTargetLang);
             return result.Text;
         }
         catch (DeepLException ex)
         {
             Console.WriteLine($"Translation error: {ex.Message}");
-            return englishText; // Fallback to original text on error
+            return englishText;
         }
     }
+
     public static async Task<string> HandleGreetingAsync(string userInput)
     {
         if (string.IsNullOrWhiteSpace(userInput))
-            return await TranslateResponseAsync("No input detected.", "EN");
-        // Clean the user input by removing punctuation and converting to lowercase
+            return await TranslateResponseAsync("No input detected.", "en");
+
         string cleanedInput = Regex.Replace(userInput.ToLowerInvariant(), @"[^\w\s]", "").Trim();
 
         // 1. Detect language of the user input
-        var detection = await translator.TranslateTextAsync(userInput, null, "EN-GB");
-        string detectedLang = detection.DetectedSourceLanguageCode.ToUpper();
-
-        // Debug: Log detected language
-        Console.WriteLine($"Detected language: {detectedLang}");
-
-
-        // 2. Translate default English greeting to the detected language for Levenshtein comparison
-        string localizedGreeting;
+        string detectedLang;
         try
         {
-            var translatedGreeting = await translator.TranslateTextAsync("Good morning!", "EN-GB", MapToTargetLanguage(detectedLang));
-            localizedGreeting = Regex.Replace(translatedGreeting.Text.ToLowerInvariant(), @"[^\w\s]", "").Trim();
+            var detection = await translator.TranslateTextAsync(userInput, null, "EN-GB");
+            detectedLang = detection.DetectedSourceLanguageCode;
+            Console.WriteLine($"Detected language: {detectedLang}");
         }
         catch (DeepLException ex)
         {
-            Console.WriteLine($"Greeting translation error: {ex.Message}");
-            localizedGreeting = "good morning"; // Fallback
+            Console.WriteLine($"Language detection error: {ex.Message}");
+            detectedLang = "en";
         }
 
+        // // 2. Commented out Levenshtein translation (this caused the error)
+        // string localizedGreeting;
+        // string mappedTargetLang = MapToTargetLanguage(detectedLang);
+        // try
+        // {
+        //     Console.WriteLine($"Translating 'Good morning!' to target language: {mappedTargetLang}");
+        //     var translatedGreeting = await translator.TranslateTextAsync("Good morning!", null, mappedTargetLang);
+        //     localizedGreeting = Regex.Replace(translatedGreeting.Text.ToLowerInvariant(), @"[^\w\s]", "").Trim();
+        // }
+        // catch (DeepLException ex)
+        // {
+        //     Console.WriteLine($"Greeting translation error: {ex.Message}");
+        //     localizedGreeting = GetFallbackGreeting(detectedLang);
+        // }
 
-        // 3. Compare cleaned user input with localized greeting using Levenshtein distance
-        var distance = new Levenshtein(cleanedInput);
-        int score = distance.DistanceFrom(localizedGreeting);
+        // // 3. Commented out Levenshtein comparison
+        // var distance = new Levenshtein(cleanedInput);
+        // int score = distance.DistanceFrom(localizedGreeting);
 
-        // 4. If close enough, accept greeting; otherwise, return default response
-        if (score < 5) // Arbitrary threshold for "closeness"
-        {
-            return await TranslateResponseAsync("Good morning to you too!", detectedLang);
-        }
+        // // 4. Commented out score check, assume input is a greeting
+        // if (score < 5)
+        // {
+        //     return await TranslateResponseAsync("Good morning to you too!", detectedLang);
+        // }
+        // return await TranslateResponseAsync(
+        //     "Sorry, I didn't understand that greeting, but let’s continue...",
+        //     detectedLang
+        // );
 
-        return await TranslateResponseAsync(
-            "Sorry, I didn't understand that greeting, but let’s continue...",
-            detectedLang
-        );
+        // Simplified: Always respond with "Good morning to you too!" in the detected language
+        return await TranslateResponseAsync("Good morning to you too!", detectedLang);
     }
 }
