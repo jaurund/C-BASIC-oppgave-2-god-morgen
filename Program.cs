@@ -7,18 +7,18 @@ class Program
 {
     static async Task Main()
     {
-        string key = File.ReadAllText("key.txt")!;
-        Console.WriteLine("Good morning, user!");
-        string userInput = Console.ReadLine()!;
+        string? key = File.ReadAllText("key.txt")?.Trim();
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            Console.WriteLine("Error: OpenWeatherMap API key not found in key.txt");
+            return;
+        }
+
+        Console.WriteLine("Wish me a good morning, user!");
+        string userInput = Console.ReadLine();
 
         string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
-        {
-            if (userInput is null)
-            {
-                Console.WriteLine("No input detected.");
-                return;
-            }
-        }
+
         Console.WriteLine(greetingResponse);
 
         string apiKey = key; //API key from OpenWeatherMap
@@ -47,7 +47,7 @@ class Program
                 <= 10 => "It's quite cold today. A proper jacket is a must.",
                 <= 20 => "The temperature is mild, maybe bring a light jacket.",
                 <= 30 => "It's a warm day, so light clothes should do.",
-                _ => "It's very hot today — stay in the shade and hydrate!"
+                _ => "It's very hot today — stay in the shade and hydrate!",
             };
 
             // Create message based on weather
@@ -58,7 +58,7 @@ class Program
                 "Snow" => "Snow is expected, so be cautious when walking.",
                 "Clouds" => "It's cloudy, but dry for now.",
                 "Drizzle" => "A light drizzle is in the air, maybe bring an umbrella.",
-                _ => "Check outside for more detailed weather conditions."
+                _ => "Check outside for more detailed weather conditions.",
             };
 
             Console.WriteLine($"{tempMessage} {weatherMessage}");
