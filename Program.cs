@@ -1,29 +1,38 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 class Program
 {
     static async Task Main()
     {
-        string? key = File.ReadAllText("key.txt")?.Trim();
-        if (string.IsNullOrWhiteSpace(key))
+        string? weatherKey = ReadApiKey("key.txt", "OpenWeatherMap");
+        if (weatherKey is null)
+            return;
+
+        string? deepLKey = ReadApiKey("key2deepL.txt", "DeepL");
+        if (deepLKey is null)
+            return;
+
+        GreetingHandler.Initialize(deepLKey);
+
+        Console.WriteLine("Wish me a good morning, user!");
+        string? userInput = Console.ReadLine();
+        if (userInput is null)
         {
-            Console.WriteLine("Error: OpenWeatherMap API key not found in key.txt");
+            Console.WriteLine("No input provided.");
             return;
         }
 
-        Console.WriteLine("Wish me a good morning, user!");
-        string userInput = Console.ReadLine();
-
         string greetingResponse = await GreetingHandler.HandleGreetingAsync(userInput);
-
         Console.WriteLine(greetingResponse);
 
-        string apiKey = key; //API key from OpenWeatherMap
+        string apiKey = weatherKey; //API key from OpenWeatherMap
         string city = "Bergen";
-        string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
+        string url =
+            $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
         using HttpClient client = new HttpClient();
         try
@@ -62,11 +71,36 @@ class Program
             };
 
             Console.WriteLine($"{tempMessage} {weatherMessage}");
-
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Request error: {ex.Message}");
+        }
+    }
+
+    private static string? ReadApiKey(string filePath, string serviceName)
+    {
+        try
+        {
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"Error: {serviceName} API key file '{filePath}' not found.");
+                return null;
+            }
+
+            string key = File.ReadAllText(filePath).Trim();
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                Console.WriteLine($"Error: {serviceName} API key in '{filePath}' is empty.");
+                return null;
+            }
+
+            return key;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading {serviceName} API key: {ex.Message}");
+            return null;
         }
     }
 }

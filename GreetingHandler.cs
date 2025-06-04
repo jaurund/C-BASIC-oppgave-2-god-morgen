@@ -5,21 +5,18 @@ using DeepL;
 
 public static class GreetingHandler
 {
-    private static readonly Translator translator;
+    private static Translator? translator;
 
-    static GreetingHandler()
+    public static void Initialize(string apiKey)
     {
         try
         {
-            string apiKey = File.ReadAllText("key2deepL.txt").Trim();
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new InvalidOperationException("DeepL API key is missing or empty.");
             translator = new Translator(apiKey);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Failed to initialize DeepL translator: {ex.Message}");
-            throw;
+            translator = null;
         }
     }
 
@@ -45,6 +42,9 @@ public static class GreetingHandler
 
     private static async Task<string> TranslateResponseAsync(string englishText, string targetLang)
     {
+        if (translator is null)
+            return "Translation service not available.";
+
         if (targetLang.StartsWith("en", StringComparison.OrdinalIgnoreCase))
             return englishText;
 
@@ -52,12 +52,11 @@ public static class GreetingHandler
 
         try
         {
-            Console.WriteLine(
-                $"Translating '{englishText}' to target language: {mappedTargetLang}"
-            );
+            // Translate the English text to the target language
             var result = await translator.TranslateTextAsync(englishText, null, mappedTargetLang);
             return result.Text;
         }
+        // If the target language is not supported, default to English
         catch (DeepLException ex)
         {
             Console.WriteLine($"Translation error: {ex.Message}");
@@ -67,6 +66,9 @@ public static class GreetingHandler
 
     public static async Task<string> HandleGreetingAsync(string userInput)
     {
+        if (translator is null)
+            return "DeepL translator not initialized.";
+
         if (string.IsNullOrWhiteSpace(userInput))
             return await TranslateResponseAsync("No input detected.", "en");
 
@@ -78,7 +80,6 @@ public static class GreetingHandler
         {
             var detection = await translator.TranslateTextAsync(userInput, null, "EN-GB");
             detectedLang = detection.DetectedSourceLanguageCode;
-            Console.WriteLine($"Detected language: {detectedLang}");
         }
         catch (DeepLException ex)
         {
